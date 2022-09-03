@@ -1,0 +1,10 @@
+.footer {
+    width: 68.75%;
+}
+
+@media screen and (max-width: 950px) {
+    .footer {
+        width: 88.125%; 
+    }
+}
+

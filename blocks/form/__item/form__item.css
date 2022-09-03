@@ -1,0 +1,23 @@
+.form__item {
+    border: 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid #bcbcc4;
+    font-size: 14px;
+    font-family: inherit;   
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: black;
+    width: 100%;
+    margin-top: 54px;
+}
+
+.form__item ~ .form__item {
+    margin-top: 30px;
+}
+
+@media screen and (max-width: 500px) {
+    .form__item {
+        margin-top:75px;
+    }
+}
