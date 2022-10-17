@@ -1,4 +1,5 @@
 .elements__title {
+    max-width: 218px;
     padding: 0;
     margin: 0;
     font-weight: 900;

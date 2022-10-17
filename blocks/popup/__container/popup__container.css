@@ -1,4 +1,5 @@
 .popup__container {
+    top: 35%;
     position: relative;
     display: flex;
     background-color: #fff;
