@@ -1,15 +1,17 @@
 .elements__info {
+    min-height: 23px;
     width: 87.234042553%;
     display: flex;
     justify-content: space-between;
     background-color: #fff;
     padding-top: 25px;
-    padding-bottom: 25px;
+    padding-bottom: 31px;
     width: 100%;
     border-radius: 0 0 10px 10px;
     justify-content: space-between;
     align-items: center; 
-
+    position: absolute;
+    bottom: 0;
 }
 
 
