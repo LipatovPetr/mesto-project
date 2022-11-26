@@ -1,4 +1,6 @@
 .elements__element {
     height: 361px;
     position: relative;
+    overflow: hidden;
+
 }

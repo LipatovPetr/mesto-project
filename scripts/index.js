@@ -1,3 +1,32 @@
+// Массив карточек, которые должны выводиться по умолчанию 
+
+const initialCards = [
+  {
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  },
+];
+
 // **************** ИНИЦИАЛИЗАЦИЯ ГЛОБАЛЬНЫХ ПЕРЕМЕННЫХ **************** 
 
 const profilePopup = document.querySelector('.popup__profile');
@@ -43,45 +72,11 @@ cardsAddCardPopupForm.addEventListener('submit', submitCardForm);
 photoPopupCloseButton.addEventListener('click', function (){closePopup(cardsPhotoPopup)});
 
 
-// Массив карточек, которые должны выводиться по умолчанию 
+// Вывод карточек по умолчанию 
 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  },
-];
-
-// Вывода карточек по умолчанию 
-
-initialCards.forEach(function(card){
-  const cardElement = cardTemplate.querySelector('.elements__element').cloneNode(true);
-  cardElement.querySelector('.elements__title').textContent = card.name;
-  cardElement.querySelector('.elements__image').src = card.link;
-  cardElement.querySelector('.elements__heart-button').addEventListener('click', toggleCardLikeStatus);
-  cardElement.querySelector('.elements__remove-button').addEventListener('click', removeCard);
-  cardElement.querySelector('.elements__image').addEventListener('click', renderCardPopup);
-  renderCard(cardElement, cardsContainer);
+initialCards.forEach(function(element){
+  const newCard = createCard(element.name, element.link); 
+  renderCard(newCard, cardsContainer);
 })
 
 // **************** ФУНКЦИИ ****************
@@ -98,7 +93,7 @@ function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
-//  Функция изменения данных профиля 
+//  Колбэк-функция изменения данных профиля 
 
 function submitProfileForm (evt) {
   evt.preventDefault(); 
@@ -113,21 +108,22 @@ function submitProfileForm (evt) {
 
 function submitCardForm (evt) {
   evt.preventDefault(); 
-  createCard();
+  const newCard = createCard(cardsAddCardPopupFormTitleInput.value, cardsAddCardPopupFormLinkInput.value);
+  renderCard(newCard, cardsContainer); 
   closePopup(cardsAddCardPopup);
+  cardsAddCardPopupForm.reset();
 }; 
 
-// Функция создания карточки
+//  Функция создания карточки  
 
-function createCard(){
+function createCard(name, link){
   const cardElement = cardTemplate.querySelector('.elements__element').cloneNode(true);
-  cardElement.querySelector('.elements__title').textContent = cardsAddCardPopupFormTitleInput.value;
-  cardElement.querySelector('.elements__image').src = cardsAddCardPopupFormLinkInput.value;
+  cardElement.querySelector('.elements__title').textContent = name; 
+  cardElement.querySelector('.elements__image').src = link;
   cardElement.querySelector('.elements__heart-button').addEventListener('click', toggleCardLikeStatus);
   cardElement.querySelector('.elements__remove-button').addEventListener('click', removeCard);
   cardElement.querySelector('.elements__image').addEventListener('click', renderCardPopup);
-  cardsAddCardPopupForm.reset();
-  renderCard(cardElement, cardsContainer);
+  return cardElement; 
 };
 
 // Функция добавления карточки на вебсайт
@@ -139,8 +135,6 @@ function renderCard(card, container) {
 // Функция удаления карточки
 
 function removeCard(evt){
-  const targetCard = evt.target.closest('.elements__element').getAttribute('data-id'); 
-  initialCards.splice(initialCards.findIndex((card) => card.id == targetCard),1);
   evt.target.closest('.elements__element').remove();
 };
 
@@ -158,3 +152,5 @@ function renderCardPopup(evt){
   cardsPhotoPopup.querySelector('.photo-popup__subtitle').textContent = targetCard.querySelector('.elements__title').textContent;
   openPopup(cardsPhotoPopup); 
 }
+
+
