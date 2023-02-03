@@ -1,4 +1,4 @@
-import {initialCards, cardTemplate, cardsContainer} from "../index.js";
+import {cardTemplate} from "./constants";
 import {renderCardPopup} from "./modal.js";
 
 //  Функция создания карточки  

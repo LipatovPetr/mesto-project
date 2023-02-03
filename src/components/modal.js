@@ -3,42 +3,64 @@ import {
     addCardPopupForm,
     addCardPopupFormTitleInput,
     addCardPopupFormLinkInput,
-    
+    addCardPopupSubmitButton,
 
+    profileNameTitle,
+    profileOcupationTitle,
+  
     profilePopup,
-    profilePopupForm,
     profilePopupFormNameInput,
     profilePopupFormjobInput,
 
-    cardsPhotoPopup, 
+    cardsPhotoPopup,
+    cardsPhotoPopupImage,
+    cardsPhotoPopupSubtitle,
     cardsContainer,
 
-} from "../index.js";
+    validationConfig
+
+} from "./constants.js";
 
 import {createCard, renderCard} from "./card.js";
 
-// Функция открытия попапа
+// функция закрытия попапа при нажадии на Esc
+
+function closeByEscape(evt) {
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  }
+}
+
+// Функция открытия попапа и добавление листенера закрытия при нажатии на Esc
 
 export function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', closeByEscape); 
+
+  if (popup == profilePopup){
+    profilePopupFormNameInput.value = profileNameTitle.textContent; 
+    profilePopupFormjobInput.value = profileOcupationTitle.textContent;
+  } 
 }
 
-// Функция закрытия попапа
+// Функция закрытия попапа и удаление листенера закрытия при нажатии на Esc
 
 export function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeByEscape); 
 }
 
 //  Колбэк-функция изменения данных профиля 
 
 export function submitProfileForm(evt) {
   evt.preventDefault(); 
-  const name = profilePopupFormNameInput.value;
-  const occupation = profilePopupFormjobInput.value;
-  document.querySelector('.profile__name').textContent = name;
-  document.querySelector('.profile__title').textContent = occupation;
+  const nameInput = profilePopupFormNameInput.value;
+  const occupationInput = profilePopupFormjobInput.value;
+  profileNameTitle.textContent = nameInput;
+  profileOcupationTitle.textContent = occupationInput;
   closePopup(profilePopup);
-  profilePopupForm.reset();
+  
 };
 
 // Колбэк-функция подтверждения формы добавления карточки 
@@ -49,15 +71,16 @@ export function submitCardForm (evt) {
   renderCard(newCard, cardsContainer); 
   closePopup(addCardPopup);
   addCardPopupForm.reset();
-  
+  addCardPopupSubmitButton.disabled = true;
+  addCardPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
 }; 
 
 //  Функция открытия попапа с изображением   
 
 export function renderCardPopup(evt){
   const targetCard = evt.target.closest('.elements__element')
-  cardsPhotoPopup.querySelector('.photo-popup__image').src = targetCard.querySelector('.elements__image').src;
-  cardsPhotoPopup.querySelector('.photo-popup__subtitle').textContent = targetCard.querySelector('.elements__title').textContent;
+  cardsPhotoPopupImage.src = targetCard.querySelector('.elements__image').src;
+  cardsPhotoPopupSubtitle.textContent = targetCard.querySelector('.elements__title').textContent;
   openPopup(cardsPhotoPopup); 
-}
+};
 
