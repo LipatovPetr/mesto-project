@@ -38,7 +38,8 @@ import {
   openPopup,
   closePopup, 
   submitProfileForm, 
-  submitCardForm
+  submitCardForm,
+  showProfileData,
 } from "./components/modal.js";
 
 import {
@@ -56,10 +57,13 @@ initialCards.forEach(function(element){
 
 // Попап "редактировать профиль": вешаем колбэки -открытия, -закрытия попапа, -сабмита изменения данных профиля
 
+
 profilePopupOpenButton.addEventListener('click', function (){openPopup(profilePopup)});
+profilePopupOpenButton.addEventListener('click', showProfileData);
 profilePopupCloseButton.addEventListener('click', function (){closePopup(profilePopup)});
 profilePopupForm.addEventListener('submit', submitProfileForm); 
 profilePopupContainer.addEventListener('click', function(event){event.stopPropagation()});
+
 
 // Попап "добавления карточки": вешаем колбэки -открытия, -закрытия попапа, -сабмита добавления новой карточки
 
@@ -80,5 +84,19 @@ popupsAll.forEach(popup => popup.addEventListener('click',function (){closePopup
 // Включаем валидацию форм и полей 
 
 enableValidation(validationConfig); 
+
+
+fetch('https://nomoreparties.co/v1/plus-cohort-19/users/me', {
+  headers: {
+    authorization: 'c061e49c-1434-49b8-869d-f52e38c6e093'
+  }
+})
+  .then(res => res.json())
+  .then((result) => {
+    console.log(result.name);
+  }); 
+
+
+
 
 

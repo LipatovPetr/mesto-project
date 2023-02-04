@@ -11,6 +11,7 @@ import {
     profilePopup,
     profilePopupFormNameInput,
     profilePopupFormjobInput,
+    profilePopupSubmitButton,
 
     cardsPhotoPopup,
     cardsPhotoPopupImage,
@@ -37,11 +38,6 @@ function closeByEscape(evt) {
 export function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', closeByEscape); 
-
-  if (popup == profilePopup){
-    profilePopupFormNameInput.value = profileNameTitle.textContent; 
-    profilePopupFormjobInput.value = profileOcupationTitle.textContent;
-  } 
 }
 
 // Функция закрытия попапа и удаление листенера закрытия при нажатии на Esc
@@ -49,6 +45,16 @@ export function openPopup(popup) {
 export function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closeByEscape); 
+}
+
+
+//  Колбэк-функция отображения данных профиля в попапе профиля
+
+export function showProfileData(){
+  profilePopupFormNameInput.value = profileNameTitle.textContent; 
+  profilePopupFormjobInput.value = profileOcupationTitle.textContent;
+  profilePopupSubmitButton.disabled = true;
+  profilePopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
 }
 
 //  Колбэк-функция изменения данных профиля 

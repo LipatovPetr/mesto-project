@@ -40,7 +40,9 @@ export const initialCards = [
   export const profilePopupFormNameInput = document.getElementById('profile-name-input'); 
   export const profilePopupFormjobInput = document.getElementById('profile-occupation-input');  
   export const profilePopupOpenButton = document.querySelector('.profile__edit-button'); 
-  export const profilePopupCloseButton = document.querySelector('.popup__close-icon'); 
+  export const profilePopupCloseButton = document.querySelector('.popup__close-icon');
+  export const profilePopupSubmitButton = document.querySelector('.profile-form__button');
+
   
   export const addCardPopup = document.querySelector('.popup__cards');
   export const addCardPopupOpenButton = document.querySelector('.profile__add-button'); 
@@ -72,3 +74,5 @@ export const initialCards = [
     errorClass: 'form__error-text_active'
   }; 
 
+
+  

@@ -5,12 +5,13 @@ import {renderCardPopup} from "./modal.js";
 
 export function createCard(name, link){
   const cardElement = cardTemplate.querySelector('.elements__element').cloneNode(true);
+  const cardElementImage = cardElement.querySelector('.elements__image'); 
   cardElement.querySelector('.elements__title').textContent = name; 
-  cardElement.querySelector('.elements__image').alt = name;
-  cardElement.querySelector('.elements__image').src = link;
+  cardElementImage.alt = name;
+  cardElementImage.src = link;
   cardElement.querySelector('.elements__heart-button').addEventListener('click', toggleCardLikeStatus);
   cardElement.querySelector('.elements__remove-button').addEventListener('click', removeCard);
-  cardElement.querySelector('.elements__image').addEventListener('click', renderCardPopup);
+  cardElementImage.addEventListener('click', renderCardPopup);
   return cardElement; 
 };
 
