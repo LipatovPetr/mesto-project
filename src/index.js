@@ -3,10 +3,14 @@
 import './pages/index.css';
 
 import {
-  initialCards,
+  avatarPopup,
+  avatarPopupContainer,
+  avatarPopupCloseButton,
+  avatarPopupForm, 
 
   popupsAll,
 
+  profileImage, 
   profilePopup, 
   profilePopupForm,
   profilePopupContainer,
@@ -18,8 +22,6 @@ import {
   addCardPopupCloseButton,
   addCardPopupForm, 
   addCardPopupContainer,
-  
-  cardsContainer, 
 
   cardsPhotoPopup, 
   photoPopupCloseButton, 
@@ -30,16 +32,12 @@ import {
 } from "./components/constants.js";
 
 import {
-  createCard,
-  renderCard
-} from "./components/card.js";
-
-import {
   openPopup,
   closePopup, 
   submitProfileForm, 
   submitCardForm,
   showProfileData,
+  submitAvatarForm
 } from "./components/modal.js";
 
 import {
@@ -48,12 +46,12 @@ import {
 
 // **************** КЛИЕНТСКИЙ КОД **************** 
 
-// Вывод 6 первых карточек по умолчанию 
+// Попап "редактировать аватар": вешаем колбэки -открытия, -закрытия попапа, -сабмита изменения изображения 
 
-initialCards.forEach(function(element){
-  const newCard = createCard(element.name, element.link); 
-  renderCard(newCard, cardsContainer);
-})
+profileImage.addEventListener('click', function (){openPopup(avatarPopup)})
+avatarPopupCloseButton.addEventListener('click', function (){closePopup(avatarPopup)});
+avatarPopupContainer.addEventListener('click', function(event){event.stopPropagation()});
+avatarPopupForm.addEventListener('submit', submitAvatarForm); 
 
 // Попап "редактировать профиль": вешаем колбэки -открытия, -закрытия попапа, -сабмита изменения данных профиля
 
@@ -84,17 +82,6 @@ popupsAll.forEach(popup => popup.addEventListener('click',function (){closePopup
 // Включаем валидацию форм и полей 
 
 enableValidation(validationConfig); 
-
-
-fetch('https://nomoreparties.co/v1/plus-cohort-19/users/me', {
-  headers: {
-    authorization: 'c061e49c-1434-49b8-869d-f52e38c6e093'
-  }
-})
-  .then(res => res.json())
-  .then((result) => {
-    console.log(result.name);
-  }); 
 
 
 

@@ -18,10 +18,11 @@
             <section class="profile content__profile">
                 <div class="profile__user">
                     <img src="<%=require('./images/kusto.jpg')%>" alt="жак кусто" class="profile__avatar">
+                    <img src="<%=require('./images/pencil.svg')%>" alt="иконка редактирования" class="profile__edit-icon">
                     <div class="profile__info">
-                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+                        <h1 class="profile__name"></h1>
                         <button class="profile__edit-button" type="button"></button>
-                        <p class="profile__title">Исследователь океана</p>
+                        <p class="profile__title"></p>
                     </div>
                 </div>
                 <button class="profile__add-button" type="button"></button>
@@ -30,13 +31,17 @@
             <section id="elements-container" class="elements content__elements">
 
                 <template id="card-template">
-                    <div class="elements__element">
+                    <div class="elements__element" data-owner-id="" data-card-id="">
                         <button class="elements__remove-button" type="button"></button>
                         <img src="" alt="изображение элемента" class="elements__image">
                             <div class="elements__info">
                                 <h2 class="elements__title">Element name</h2>
-                                <button class="elements__heart-button" type="button"></button>
+                                <div class="elements__likes-info">
+                                    <button class="elements__heart-button" type="button"></button>
+                                    <p class="elements__likes-value">7</p>
+                                </div>
                             </div>
+                                
                     </div>
                 </template> 
 
@@ -103,7 +108,6 @@
                             id="card-link-input" 
                             type="text" 
                             name="about" 
-                            type="text" 
                             pattern="(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)" 
                             data-error-message="Введите URL"
                             required>
@@ -112,6 +116,25 @@
                     </form>
                 </div>
                 </section>
+
+                <section class="popup popup__avatar">
+                    <div class="popup__container avatar-popup__container">
+                        <button class="popup__close-icon avatar__close-icon" type="button"></button>
+                        <form id="avatar-form" class="form" name="avatar-form" novalidate>
+                            <p class="form__heading">Обновить аватар</p> 
+                            <input placeholder="Введите ссылку на изображение"
+                            id="avatar-link-input" 
+                            class="form__item"
+                            type="text"
+                            pattern="(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
+                            data-error-message="Введите URL"
+                            required
+                            >
+                            <span class="form__error-text avatar-link-input-error"></span>
+                            <input class="form__button avatar-form__button" type="submit" value="Сохранить"> 
+                        </form>
+                    </div>
+                    </section>
 
                 <section class="popup photo-popup">
                     <div class="photo-popup__container">

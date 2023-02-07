@@ -43,7 +43,7 @@ const checkInputValidity = (formElement, inputElement, settings) => {
 //  Функция валидации всех полей формы 
 
 const hasInvalidInput = (inputList) => {
-     return inputList.some((inputElement) => {
+    return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   })
 }; 
@@ -51,13 +51,10 @@ const hasInvalidInput = (inputList) => {
 //  Функция активации/деактивации кнопки формы
 
 const toggleButtonState = (inputList, buttonElement, settings) => {
-  // Если есть хотя бы один невалидный инпут
   if (hasInvalidInput(inputList)) {
-    // сделай кнопку неактивной
         buttonElement.disabled = true;
         buttonElement.classList.add(settings.inactiveButtonClass);
   } else {
-        // иначе сделай кнопку активной
         buttonElement.disabled = false;
         buttonElement.classList.remove(settings.inactiveButtonClass);
   }

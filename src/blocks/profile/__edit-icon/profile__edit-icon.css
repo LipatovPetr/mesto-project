@@ -1,0 +1,11 @@
+.profile__edit-icon{
+    position: absolute;
+    left: 47px;
+    top: 47px;
+    opacity: 100%;
+    z-index: -1;
+}
+
+.profile__edit-icon:hover {
+    opacity: 100%;
+}

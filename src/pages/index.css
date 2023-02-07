@@ -30,6 +30,8 @@
 @import url(../blocks/profile/__add-button/profile__add-button.css);
 @import url(../blocks/profile/__plus-sign/profile__plus-sign.css);
 @import url(../blocks/profile/__user/profile__user.css);
+@import url(../blocks/profile/__edit-icon/profile__edit-icon.css);
+
 
 /* elements блок */
 @import url(../blocks/elements/elements.css);
@@ -39,7 +41,9 @@
 @import url(../blocks/elements/__heart-button/elements__heart-button.css);
 @import url(../blocks/elements/__heart-button/_active/elements__heart-button_active.css);
 @import url(../blocks/elements/__info/elements__info.css);
+@import url(../blocks/elements/__likes-value/elements__likes-value.css);
 @import url(../blocks/elements/__remove-button/elements__remove-button.css);
+@import url(../blocks/elements/__remove-button/_active/elements__remove-button_active.css);
 
 
 /* footer блок */

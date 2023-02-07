@@ -1,37 +1,10 @@
-// Изначальный массив карточек
-
-export const initialCards = [
-    {
-      name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-      name: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    },
-  ];
-  
-  // **************** ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ **************** 
+// **************** ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ **************** 
+  export const userId = {};
 
   export const profileNameTitle = document.querySelector('.profile__name');
   export const profileOcupationTitle = document.querySelector('.profile__title');
-  
+  export const profileImage = document.querySelector('.profile__avatar');
+
   export const popupsAll = document.querySelectorAll('.popup');
   
   export const profilePopup = document.querySelector('.popup__profile');
@@ -43,7 +16,6 @@ export const initialCards = [
   export const profilePopupCloseButton = document.querySelector('.popup__close-icon');
   export const profilePopupSubmitButton = document.querySelector('.profile-form__button');
 
-  
   export const addCardPopup = document.querySelector('.popup__cards');
   export const addCardPopupOpenButton = document.querySelector('.profile__add-button'); 
   export const addCardPopupCloseButton = document.querySelector('.popup-cards__close-icon'); 
@@ -53,6 +25,13 @@ export const initialCards = [
   export const addCardPopupContainer = document.querySelector('.card-popup__container');
   export const addCardPopupSubmitButton = document.querySelector('.card-form__button');
 
+  export const avatarPopup = document.querySelector('.popup__avatar');
+  export const avatarPopupContainer = document.querySelector('.avatar-popup__container');
+  export const avatarPopupCloseButton = document.querySelector('.avatar__close-icon');
+  export const avatarPopupForm = document.getElementById('avatar-form');
+  export const avatarPopupFormUrlInput = document.getElementById('avatar-link-input');
+  export const avatarPopupSubmitButton = document.querySelector('.avatar-form__button');
+ 
   export const cardsCard = document.querySelector('.elements__element'); 
  
   export const cardTemplate = document.getElementById('card-template').content; 
@@ -74,5 +53,13 @@ export const initialCards = [
     errorClass: 'form__error-text_active'
   }; 
 
+  export const apiConfig = {
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-19',
+    headers: {
+      authorization: 'c061e49c-1434-49b8-869d-f52e38c6e093',
+      'Content-Type': 'application/json'
+    }
+  }
 
-  
+
+ 

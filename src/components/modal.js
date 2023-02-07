@@ -1,4 +1,9 @@
 import {
+  avatarPopup,
+  avatarPopupFormUrlInput, 
+  avatarPopupForm,
+  avatarPopupSubmitButton, 
+
     addCardPopup,
     addCardPopupForm,
     addCardPopupFormTitleInput,
@@ -16,13 +21,11 @@ import {
     cardsPhotoPopup,
     cardsPhotoPopupImage,
     cardsPhotoPopupSubtitle,
-    cardsContainer,
-
-    validationConfig
-
+    validationConfig,
+  
 } from "./constants.js";
 
-import {createCard, renderCard} from "./card.js";
+import {updateProfileData, uploadNewCard, updateAvatar} from "./api.js";
 
 // функция закрытия попапа при нажадии на Esc
 
@@ -61,20 +64,15 @@ export function showProfileData(){
 
 export function submitProfileForm(evt) {
   evt.preventDefault(); 
-  const nameInput = profilePopupFormNameInput.value;
-  const occupationInput = profilePopupFormjobInput.value;
-  profileNameTitle.textContent = nameInput;
-  profileOcupationTitle.textContent = occupationInput;
+  updateProfileData(profilePopupFormNameInput.value, profilePopupFormjobInput.value);
   closePopup(profilePopup);
-  
 };
 
 // Колбэк-функция подтверждения формы добавления карточки 
 
-export function submitCardForm (evt) {
+export function submitCardForm(evt) {
   evt.preventDefault(); 
-  const newCard = createCard(addCardPopupFormTitleInput.value, addCardPopupFormLinkInput.value);
-  renderCard(newCard, cardsContainer); 
+  uploadNewCard(addCardPopupFormTitleInput.value, addCardPopupFormLinkInput.value); 
   closePopup(addCardPopup);
   addCardPopupForm.reset();
   addCardPopupSubmitButton.disabled = true;
@@ -90,3 +88,11 @@ export function renderCardPopup(evt){
   openPopup(cardsPhotoPopup); 
 };
 
+export function submitAvatarForm(evt) {
+  evt.preventDefault(); 
+  updateAvatar(avatarPopupFormUrlInput.value); 
+  closePopup(avatarPopup);
+  avatarPopupForm.reset();
+  avatarPopupSubmitButton.disabled = true;
+  avatarPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
+};
