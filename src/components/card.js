@@ -1,5 +1,5 @@
 import {cardTemplate, userId} from "./constants";
-import {removeCardFromServer, toggleLike} from "./api.js";
+import {addLikeOnServer, removeLikeOnServer, getCardsData, removeCardFromServer} from "./api.js";
 import {renderCardPopup} from "./modal.js";
 
 //  Функция создания карточки  
@@ -15,18 +15,18 @@ export function createCard(name, link, likes, ownerId, cardId){
   cardElementImage.src = link;
   cardElement.dataset.ownerId = ownerId; 
   cardElement.dataset.cardId = cardId; 
-  cardElement.querySelector('.elements__heart-button').addEventListener('click', toggleLike);
+  cardElement.querySelector('.elements__heart-button').addEventListener('click', toggleLikeStatus);
   cardElementImage.addEventListener('click', renderCardPopup);
   return cardElement; 
 };
 
-// Функция добавления карточки на вебсайт
+// Функция отрисовки карточки на вебсайт
 
 export function renderCard(card, container, likeStatus) {
   const likeButton = card.querySelector('.elements__heart-button')
   container.prepend(card);
   toggleRemoveButtonStatus(card);
-  toggleCardLikeStatus(likeButton, likeStatus);
+  updateLikeStatus(likeButton, likeStatus);
 } 
 
 // Функция проверки создателя/владельца карточки 
@@ -61,7 +61,7 @@ function removeCardFromDom(evt){
 
 //  Функция включения/отключения лайка карточки 
 
-function toggleCardLikeStatus(card, status){
+function updateLikeStatus(card, status){
   if (status){
     card.classList.add('elements__heart-button_active');
   } else {
@@ -69,7 +69,28 @@ function toggleCardLikeStatus(card, status){
   }
 }
 
-
-
+function toggleLikeStatus(evt){
+  const targetCardId = evt.target.closest('.elements__element').getAttribute('data-card-id');
+  getCardsData()
+    .then((data) => {
+      const targetCardLikes = data.find(card => card._id === targetCardId).likes;
+      if(targetCardLikes.some(like => like._id === userId.id)){
+        removeLikeOnServer(targetCardId)
+          .then((updatedCardData) => {
+            evt.target.nextElementSibling.textContent = updatedCardData.likes.length;
+            evt.target.classList.remove('elements__heart-button_active');
+          })
+      } else {
+        addLikeOnServer(targetCardId)
+          .then((updatedCardData) => {
+            evt.target.nextElementSibling.textContent = updatedCardData.likes.length; 
+            evt.target.classList.add('elements__heart-button_active');
+          })
+      }
+    })
+    .catch((err) => {
+      renderError(`Ошибка: ${err}`); 
+    })
+}
 
 

@@ -4,28 +4,36 @@ import {
   avatarPopupForm,
   avatarPopupSubmitButton, 
 
-    addCardPopup,
-    addCardPopupForm,
-    addCardPopupFormTitleInput,
-    addCardPopupFormLinkInput,
-    addCardPopupSubmitButton,
+  addCardPopup,
+  addCardPopupForm,
+  addCardPopupFormTitleInput,
+  addCardPopupFormLinkInput,
+  addCardPopupSubmitButton,
 
-    profileNameTitle,
-    profileOcupationTitle,
+  profileNameTitle,
+  profileOcupationTitle,
   
-    profilePopup,
-    profilePopupFormNameInput,
-    profilePopupFormjobInput,
-    profilePopupSubmitButton,
+  profileImage,
+  profilePopup,
+  profilePopupFormNameInput,
+  profilePopupFormjobInput,
+  profilePopupSubmitButton,
 
-    cardsPhotoPopup,
-    cardsPhotoPopupImage,
-    cardsPhotoPopupSubtitle,
-    validationConfig,
+  cardsContainer,
+  cardsPhotoPopup,
+  cardsPhotoPopupImage,
+  cardsPhotoPopupSubtitle,
+  validationConfig,
   
 } from "./constants.js";
 
-import {updateProfileData, uploadNewCard, updateAvatar} from "./api.js";
+import {uploadProfileData, uploadNewCard, updateAvatarOnServer} from "./api.js";
+
+import {createCard,
+  renderCard,
+} from "./card.js";
+
+import {renderError} from "./utils";
 
 // функция закрытия попапа при нажадии на Esc
 
@@ -50,7 +58,6 @@ export function closePopup(popup) {
   document.removeEventListener('keydown', closeByEscape); 
 }
 
-
 //  Колбэк-функция отображения данных профиля в попапе профиля
 
 export function showProfileData(){
@@ -62,21 +69,41 @@ export function showProfileData(){
 
 //  Колбэк-функция изменения данных профиля 
 
-export function submitProfileForm(evt) {
+export function submitProfileForm(evt){
   evt.preventDefault(); 
-  updateProfileData(profilePopupFormNameInput.value, profilePopupFormjobInput.value);
-  closePopup(profilePopup);
+  profilePopupSubmitButton.value = 'Сохраняю...'; 
+  uploadProfileData(profilePopupFormNameInput.value, profilePopupFormjobInput.value)
+    .then((response) => {
+      profileNameTitle.textContent = response.name,
+      profileOcupationTitle.textContent = response.about,
+      profilePopupSubmitButton.value = 'Сохранить'
+    })
+    .then(closePopup(profilePopup))
+    .catch((err) => {
+          renderError(`Ошибка: ${err}`)
+    })
 };
 
 // Колбэк-функция подтверждения формы добавления карточки 
 
 export function submitCardForm(evt) {
   evt.preventDefault(); 
-  uploadNewCard(addCardPopupFormTitleInput.value, addCardPopupFormLinkInput.value); 
-  closePopup(addCardPopup);
-  addCardPopupForm.reset();
-  addCardPopupSubmitButton.disabled = true;
-  addCardPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
+  addCardPopupSubmitButton.value = 'Сохраняю...'; 
+  uploadNewCard(addCardPopupFormTitleInput.value, addCardPopupFormLinkInput.value)
+    .then((response) => {
+      const newCard = createCard(response.name, response.link, response.likes.length, response.owner._id, response._id);
+      renderCard(newCard, cardsContainer);
+    })
+    .then(
+      closePopup(addCardPopup),
+      addCardPopupForm.reset(),
+      addCardPopupSubmitButton.disabled = true,
+      addCardPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass),
+      addCardPopupSubmitButton.value = 'Сохранить', 
+    )
+    .catch((err) => {
+        renderError(`Ошибка: ${err}`); 
+    })
 }; 
 
 //  Функция открытия попапа с изображением   
@@ -88,11 +115,21 @@ export function renderCardPopup(evt){
   openPopup(cardsPhotoPopup); 
 };
 
-export function submitAvatarForm(evt) {
+//  Функция открытия попапа с изображением   
+
+export function submitAvatarForm(evt){
   evt.preventDefault(); 
-  updateAvatar(avatarPopupFormUrlInput.value); 
-  closePopup(avatarPopup);
-  avatarPopupForm.reset();
-  avatarPopupSubmitButton.disabled = true;
-  avatarPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
+  avatarPopupSubmitButton.value = 'Сохраняю...'; 
+  updateAvatarOnServer(avatarPopupFormUrlInput.value)
+  .then((response) => {
+    profileImage.src = response.avatar;
+    closePopup(avatarPopup);
+    avatarPopupForm.reset();
+    avatarPopupSubmitButton.disabled = true;
+    avatarPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
+    avatarPopupSubmitButton.value = 'Сохранить'; 
+  })
+  .catch((err) => {
+    renderError(`Ошибка: ${err}`); 
+  })
 };

@@ -3,6 +3,8 @@
 import './pages/index.css';
 
 import {
+  userId,
+
   avatarPopup,
   avatarPopupContainer,
   avatarPopupCloseButton,
@@ -10,7 +12,12 @@ import {
 
   popupsAll,
 
-  profileImage, 
+  profileImage,
+  profileNameTitle,
+  profileOcupationTitle,
+
+  cardsContainer, 
+  
   profilePopup, 
   profilePopupForm,
   profilePopupContainer,
@@ -41,10 +48,43 @@ import {
 } from "./components/modal.js";
 
 import {
+  createCard,
+  renderCard
+} from "./components/card.js";
+
+import {
+  getProfileData,
+  getCardsData, 
+} from "./components/api.js";
+
+import {
+  renderError,
+} from "./components/utils.js";
+
+import {
   enableValidation
 } from "./components/validate.js";
 
 // **************** КЛИЕНТСКИЙ КОД **************** 
+
+// Загружаем даные пользователя 
+
+Promise.all([getProfileData(), getCardsData()])
+  .then(([profileData, cardsData]) => {
+    profileNameTitle.textContent = profileData.name;
+    profileOcupationTitle.textContent = profileData.about;
+    profileImage.src = profileData.avatar; 
+    userId.id = profileData._id;
+
+    cardsData.forEach(function(element){
+      const userLikeStatus = element.likes.some(like => like._id === userId.id);
+      const newCard = createCard(element.name, element.link, element.likes.length, element.owner._id, element._id); 
+      renderCard(newCard, cardsContainer, userLikeStatus);
+    })
+  })
+  .catch((err) => {
+        renderError(`Ошибка: ${err}`); 
+      })
 
 // Попап "редактировать аватар": вешаем колбэки -открытия, -закрытия попапа, -сабмита изменения изображения 
 
@@ -54,7 +94,6 @@ avatarPopupContainer.addEventListener('click', function(event){event.stopPropaga
 avatarPopupForm.addEventListener('submit', submitAvatarForm); 
 
 // Попап "редактировать профиль": вешаем колбэки -открытия, -закрытия попапа, -сабмита изменения данных профиля
-
 
 profilePopupOpenButton.addEventListener('click', function (){openPopup(profilePopup)});
 profilePopupOpenButton.addEventListener('click', showProfileData);
