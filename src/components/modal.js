@@ -75,14 +75,14 @@ export function submitProfileForm(evt){
   uploadProfileData(profilePopupFormNameInput.value, profilePopupFormjobInput.value)
     .then((response) => {
       profileNameTitle.textContent = response.name,
-      profileOcupationTitle.textContent = response.about
+      profileOcupationTitle.textContent = response.about,
+      closePopup(profilePopup)
     })
     .catch((err) => {
       renderError(`Ошибка: ${err}`)
     })
     .finally(
-      profilePopupSubmitButton.value = 'Сохранить',
-      closePopup(profilePopup),
+      profilePopupSubmitButton.value = 'Сохранить'
     )
 };
 
@@ -95,16 +95,16 @@ export function submitCardForm(evt) {
     .then((response) => {
       const newCard = createCard(response.name, response.link, response.likes.length, response.owner._id, response._id);
       renderCard(newCard, cardsContainer);
+      addCardPopupForm.reset();
+      addCardPopupSubmitButton.disabled = true;
+      addCardPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
+      closePopup(addCardPopup);
     })
     .catch((err) => {
       renderError(`Ошибка: ${err}`); 
     })
     .finally(
-      addCardPopupSubmitButton.value = 'Сохранить',
-      addCardPopupForm.reset(),
-      addCardPopupSubmitButton.disabled = true,
-      addCardPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass),
-      closePopup(addCardPopup)
+      addCardPopupSubmitButton.value = 'Сохранить'
     )
 }; 
 
@@ -126,16 +126,16 @@ export function submitAvatarForm(evt){
   updateAvatarOnServer(avatarPopupFormUrlInput.value)
   .then((response) => {
     profileImage.src = response.avatar;
+    closePopup(avatarPopup);
+    avatarPopupForm.reset();
+    avatarPopupSubmitButton.disabled = true;
+    avatarPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
    
   })
   .catch((err) => {
     renderError(`Ошибка: ${err}`); 
   })
   .finally(
-    avatarPopupSubmitButton.value = 'Сохранить',
-    closePopup(avatarPopup),
-    avatarPopupForm.reset(),
-    avatarPopupSubmitButton.disabled = true,
-    avatarPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass),
+    avatarPopupSubmitButton.value = 'Сохранить'
     )
 };
