@@ -75,13 +75,15 @@ export function submitProfileForm(evt){
   uploadProfileData(profilePopupFormNameInput.value, profilePopupFormjobInput.value)
     .then((response) => {
       profileNameTitle.textContent = response.name,
-      profileOcupationTitle.textContent = response.about,
-      profilePopupSubmitButton.value = 'Сохранить'
+      profileOcupationTitle.textContent = response.about
     })
-    .then(closePopup(profilePopup))
     .catch((err) => {
-          renderError(`Ошибка: ${err}`)
+      renderError(`Ошибка: ${err}`)
     })
+    .finally(
+      profilePopupSubmitButton.value = 'Сохранить',
+      closePopup(profilePopup),
+    )
 };
 
 // Колбэк-функция подтверждения формы добавления карточки 
@@ -94,16 +96,16 @@ export function submitCardForm(evt) {
       const newCard = createCard(response.name, response.link, response.likes.length, response.owner._id, response._id);
       renderCard(newCard, cardsContainer);
     })
-    .then(
-      closePopup(addCardPopup),
+    .catch((err) => {
+      renderError(`Ошибка: ${err}`); 
+    })
+    .finally(
+      addCardPopupSubmitButton.value = 'Сохранить',
       addCardPopupForm.reset(),
       addCardPopupSubmitButton.disabled = true,
       addCardPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass),
-      addCardPopupSubmitButton.value = 'Сохранить', 
+      closePopup(addCardPopup)
     )
-    .catch((err) => {
-        renderError(`Ошибка: ${err}`); 
-    })
 }; 
 
 //  Функция открытия попапа с изображением   
@@ -111,6 +113,7 @@ export function submitCardForm(evt) {
 export function renderCardPopup(evt){
   const targetCard = evt.target.closest('.elements__element')
   cardsPhotoPopupImage.src = targetCard.querySelector('.elements__image').src;
+  cardsPhotoPopupImage.alt = targetCard.querySelector('.elements__title').textContent;
   cardsPhotoPopupSubtitle.textContent = targetCard.querySelector('.elements__title').textContent;
   openPopup(cardsPhotoPopup); 
 };
@@ -123,13 +126,16 @@ export function submitAvatarForm(evt){
   updateAvatarOnServer(avatarPopupFormUrlInput.value)
   .then((response) => {
     profileImage.src = response.avatar;
-    closePopup(avatarPopup);
-    avatarPopupForm.reset();
-    avatarPopupSubmitButton.disabled = true;
-    avatarPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass);
-    avatarPopupSubmitButton.value = 'Сохранить'; 
+   
   })
   .catch((err) => {
     renderError(`Ошибка: ${err}`); 
   })
+  .finally(
+    avatarPopupSubmitButton.value = 'Сохранить',
+    closePopup(avatarPopup),
+    avatarPopupForm.reset(),
+    avatarPopupSubmitButton.disabled = true,
+    avatarPopupSubmitButton.classList.add(validationConfig.inactiveButtonClass),
+    )
 };

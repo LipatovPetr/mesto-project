@@ -45,8 +45,14 @@ export function toggleRemoveButtonStatus(card){
   const removeButton = card.querySelector('.elements__remove-button');
   if (checkCardOwner(card)){
     removeButton.classList.add('elements__remove-button_active')
-    removeButton.addEventListener('click', function (){removeCardFromServer(card)});
-    removeButton.addEventListener('click', removeCardFromDom); 
+    removeButton.addEventListener('click', function (evt){
+      removeCardFromServer(card)
+        .then(removeCardFromDom(evt))
+        .catch((err) => {
+          renderError(`Ошибка: ${err}`); 
+        })
+    });
+   
   } else { 
     removeButton.classList.remove('elements__remove-button_active');
   }
@@ -77,15 +83,21 @@ function toggleLikeStatus(evt){
       if(targetCardLikes.some(like => like._id === userId.id)){
         removeLikeOnServer(targetCardId)
           .then((updatedCardData) => {
-            evt.target.nextElementSibling.textContent = updatedCardData.likes.length;
+            evt.target.closest('.elements__element').querySelector('.elements__likes-value').textContent = updatedCardData.likes.length;
             evt.target.classList.remove('elements__heart-button_active');
+          })
+          .catch((err) => {
+            renderError(`Ошибка: ${err}`); 
           })
       } else {
         addLikeOnServer(targetCardId)
           .then((updatedCardData) => {
-            evt.target.nextElementSibling.textContent = updatedCardData.likes.length; 
+            evt.target.closest('.elements__element').querySelector('.elements__likes-value').textContent = updatedCardData.likes.length; 
             evt.target.classList.add('elements__heart-button_active');
           })
+          .catch((err) => {
+            renderError(`Ошибка: ${err}`); 
+          }) 
       }
     })
     .catch((err) => {
