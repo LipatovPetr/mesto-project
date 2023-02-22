@@ -111,7 +111,6 @@ const api = new Api({
   }
 });
 
-console.log
 api.getInitialCards()
 
 
