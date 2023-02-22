@@ -113,7 +113,7 @@ const api = new Api({
 
 api.getInitialCards()
 
-
+console.log('test')
   // export function getCardsData(){
   //   return fetch(`${apiConfig.baseUrl}/cards`, {
   //     headers: apiConfig.headers,
