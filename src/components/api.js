@@ -8,6 +8,7 @@ class Api {
 
   checkResponse(res) {
     if (res.ok) {
+      console.log(`Запрос к ${res.url} статус:${res.status} `);
       return res.json();
     }
     return Promise.reject(res.status);
@@ -19,7 +20,6 @@ class Api {
       headers: this.headers
     })
       .then(this.checkResponse)
-      .then((data) => { console.log(data) })
   }
 
   //получаем данные пользователя
@@ -57,8 +57,8 @@ class Api {
   }
 
   // удаление карточки с сервера
-  removeCardFromServer(card) {
-    return fetch(`${this.url}/cards/${card.dataset.cardId}`, {
+  removeCardFromServer(cardId) {
+    return fetch(`${this.url}/cards/${cardId}`, {
       method: "DELETE",
       headers: this.headers,
     })
@@ -96,10 +96,15 @@ class Api {
 
 };
 
-const api = new Api({
+export const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-19',
   headers: {
     authorization: 'c061e49c-1434-49b8-869d-f52e38c6e093',
     'Content-Type': 'application/json'
   }
 });
+
+
+
+
+

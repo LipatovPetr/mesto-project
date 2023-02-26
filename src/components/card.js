@@ -1,108 +1,137 @@
-import {cardTemplate, userId} from "./constants";
-import {addLikeOnServer, removeLikeOnServer, getCardsData, removeCardFromServer} from "./api.js";
-import {renderCardPopup} from "./modal.js";
+// import {cardTemplate, userId} from "./constants";
+// import {addLikeOnServer, removeLikeOnServer, getCardsData, removeCardFromServer} from "./api.js";
+// import {renderCardPopup} from "./modal.js";
 
-//  Функция создания карточки  
+import { api } from "./api.js";
 
-export function createCard(name, link, likes, ownerId, cardId){
-  const cardElement = cardTemplate.querySelector('.elements__element').cloneNode(true);
-  const cardElementImage = cardElement.querySelector('.elements__image'); 
-  const cardElementTitle = cardElement.querySelector('.elements__title');  
-  const cardElementLikes = cardElement.querySelector('.elements__likes-value'); 
-  cardElementTitle.textContent = name; 
-  cardElementLikes.textContent = likes; 
-  cardElementImage.alt = name;
-  cardElementImage.src = link;
-  cardElement.dataset.ownerId = ownerId; 
-  cardElement.dataset.cardId = cardId; 
-  cardElement.querySelector('.elements__heart-button').addEventListener('click', toggleLikeStatus);
-  cardElementImage.addEventListener('click', renderCardPopup);
-  return cardElement; 
-};
+const userId = "c6b69b7acd7fe01fee50d11b"; // убрать когда создадим класс пользователя
 
-// Функция отрисовки карточки на вебсайт
-
-export function renderCard(card, container, likeStatus) {
-  const likeButton = card.querySelector('.elements__heart-button')
-  container.prepend(card);
-  toggleRemoveButtonStatus(card);
-  updateLikeStatus(likeButton, likeStatus);
-} 
-
-// Функция проверки создателя/владельца карточки 
-
-function checkCardOwner(card){
-  if (userId.id === card.dataset.ownerId){
-    return true; 
-  } else {
-    return false; 
+class Card {
+  constructor({ _id, name, link, likes, owner}, selector) {
+    this.name = name;
+    this.link = link;
+    this.likesValue = likes.length;
+    this.likesData = likes;
+    this._id = _id;
+    this._idOwner = owner._id;
+    this._selector = selector;
   }
-}
-
-// Подключение отключение кнопки удаления
-
-export function toggleRemoveButtonStatus(card){
-  const removeButton = card.querySelector('.elements__remove-button');
-  if (checkCardOwner(card)){
-    removeButton.classList.add('elements__remove-button_active')
-    removeButton.addEventListener('click', function (evt){
-      removeCardFromServer(card)
-        .then(removeCardFromDom(evt))
-        .catch((err) => {
-          renderError(`Ошибка: ${err}`); 
-        })
-    });
-   
-  } else { 
-    removeButton.classList.remove('elements__remove-button_active');
+  _getElement() {
+    const cardElement = document
+      .querySelector(this._selector)
+      .content.cloneNode(true);
+    this._element = cardElement;
   }
 
-}
-
-// Функция удаления карточки из верстки
-
-function removeCardFromDom(evt){
-  evt.target.closest('.elements__element').remove();
-};
-
-//  Функция включения/отключения лайка карточки 
-
-function updateLikeStatus(card, status){
-  if (status){
-    card.classList.add('elements__heart-button_active');
-  } else {
-    card.classList.remove('elements__heart-button_active');
+  _isOwner() {
+    if (this._idOwner === userId) {
+      return true;
+    } else {
+      return false;
+    }
   }
-}
 
-function toggleLikeStatus(evt){
-  const targetCardId = evt.target.closest('.elements__element').getAttribute('data-card-id');
-  getCardsData()
-    .then((data) => {
-      const targetCardLikes = data.find(card => card._id === targetCardId).likes;
-      if(targetCardLikes.some(like => like._id === userId.id)){
-        removeLikeOnServer(targetCardId)
-          .then((updatedCardData) => {
-            evt.target.closest('.elements__element').querySelector('.elements__likes-value').textContent = updatedCardData.likes.length;
-            evt.target.classList.remove('elements__heart-button_active');
-          })
-          .catch((err) => {
-            renderError(`Ошибка: ${err}`); 
-          })
+  _isLiked() {
+    if (this.likesData.some((like) => like._id === userId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  _setRemoveButtonStatus() {
+    if (this._isOwner()) {
+      this._element
+        .querySelector(".elements__remove-button")
+        .classList.add("elements__remove-button_active");
+    } else {
+      this._element
+        .querySelector(".elements__remove-button")
+        .classList.remove("elements__remove-button_active");
+    }
+  }
+
+  _setInitialLikeStatus() {
+    if (this._isLiked()) {
+      this._element
+        .querySelector(".elements__heart-button")
+        .classList.add("elements__heart-button_active");
+    } else {
+      this._element
+        .querySelector(".elements__heart-button")
+        .classList.remove("elements__heart-button_active");
+    }
+  }
+
+  _setEventListeners() {
+    this._element
+      .querySelector(".elements__heart-button")
+      .addEventListener("click", this.toggleLike);
+    this._element
+      .querySelector(".elements__remove-button")
+      .addEventListener("click", this.removeCard);
+  }
+
+  removeCard(evt) { // уточнить почему без эвента не получается
+    evt.target.closest(".elements__element").remove();
+    api.removeCardFromServer(
+      evt.target.closest(".elements__element").dataset.cardId
+    );
+  }
+
+  generate() {
+    this._getElement();
+    this._element.querySelector(".elements__image").src = this.link;
+    this._element.querySelector(".elements__image").alt = this.name;
+    this._element.querySelector(".elements__title").textContent = this.name;
+    this._element.querySelector(".elements__likes-value").textContent = this.likesValue;
+    this._element.querySelector(".elements__element").dataset.cardId = this._id;
+    this._element.querySelector(".elements__element").dataset.ownerId = this._idOwner;
+    this._setRemoveButtonStatus();
+    this._setInitialLikeStatus();
+    this._setEventListeners();
+    return this._element;
+  }
+
+  toggleLike(evt) {
+    const targetCardId = evt.target
+      .closest(".elements__element")
+      .getAttribute("data-card-id");
+
+    api.getInitialCards().then((cardsData) => {
+      const targetCardLikesData = cardsData.find(
+        (card) => card._id === targetCardId
+      ).likes;
+
+      if (targetCardLikesData.some((like) => like._id === userId)) {
+        api.removeLikeOnServer(targetCardId).then((updatedCardData) => {
+          evt.target
+            .closest(".elements__element")
+            .querySelector(".elements__likes-value").textContent =
+            updatedCardData.likes.length;
+          evt.target.classList.remove("elements__heart-button_active");
+        });
       } else {
-        addLikeOnServer(targetCardId)
-          .then((updatedCardData) => {
-            evt.target.closest('.elements__element').querySelector('.elements__likes-value').textContent = updatedCardData.likes.length; 
-            evt.target.classList.add('elements__heart-button_active');
-          })
-          .catch((err) => {
-            renderError(`Ошибка: ${err}`); 
-          }) 
+        api.addLikeOnServer(targetCardId).then((updatedCardData) => {
+          evt.target
+            .closest(".elements__element")
+            .querySelector(".elements__likes-value").textContent =
+            updatedCardData.likes.length;
+          evt.target.classList.add("elements__heart-button_active");
+        });
       }
-    })
-    .catch((err) => {
-      renderError(`Ошибка: ${err}`); 
-    })
+    });
+  }
+
+  render(card) {
+    const container = document.getElementById("elements-container");
+    container.prepend(card);
+  }
 }
 
-
+api.getInitialCards().then((data) => {
+  data.forEach((el) => {
+    const card = new Card(el, ".card-template");
+    card.render(card.generate());
+  });
+});
