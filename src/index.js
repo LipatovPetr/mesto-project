@@ -6,11 +6,11 @@ import {
   userId,
 
   avatarPopup,
-  avatarPopupContainer,
-  avatarPopupCloseButton,
+  // avatarPopupContainer,
+  // avatarPopupCloseButton,
   avatarPopupForm, 
 
-  popupsAll,
+  // popupsAll,
 
   profileImage,
   profileNameTitle,
@@ -20,19 +20,19 @@ import {
   
   profilePopup, 
   profilePopupForm,
-  profilePopupContainer,
+  // profilePopupContainer,
   profilePopupOpenButton, 
-  profilePopupCloseButton,
+  // profilePopupCloseButton,
 
   addCardPopup,
   addCardPopupOpenButton,
-  addCardPopupCloseButton,
+  // addCardPopupCloseButton,
   addCardPopupForm, 
-  addCardPopupContainer,
+  // addCardPopupContainer,
 
-  cardsPhotoPopup, 
-  photoPopupCloseButton, 
-  photoPopupContainer,
+  // cardsPhotoPopup, 
+  // photoPopupCloseButton, 
+  // photoPopupContainer,
 
   validationConfig
 
@@ -67,6 +67,9 @@ import {
 
 // **************** КЛИЕНТСКИЙ КОД **************** 
 
+// здесь должны использоваться все классы
+// и оздаваться из экземпляры
+
 // Загружаем даные пользователя 
 
 Promise.all([getProfileData(), getCardsData()])
@@ -89,34 +92,18 @@ Promise.all([getProfileData(), getCardsData()])
 // Попап "редактировать аватар": вешаем колбэки -открытия, -закрытия попапа, -сабмита изменения изображения 
 
 profileImage.addEventListener('click', function (){openPopup(avatarPopup)})
-avatarPopupCloseButton.addEventListener('click', function (){closePopup(avatarPopup)});
-avatarPopupContainer.addEventListener('click', function(event){event.stopPropagation()});
 avatarPopupForm.addEventListener('submit', submitAvatarForm); 
 
 // Попап "редактировать профиль": вешаем колбэки -открытия, -закрытия попапа, -сабмита изменения данных профиля
 
 profilePopupOpenButton.addEventListener('click', function (){openPopup(profilePopup)});
 profilePopupOpenButton.addEventListener('click', showProfileData);
-profilePopupCloseButton.addEventListener('click', function (){closePopup(profilePopup)});
 profilePopupForm.addEventListener('submit', submitProfileForm); 
-profilePopupContainer.addEventListener('click', function(event){event.stopPropagation()});
-
 
 // Попап "добавления карточки": вешаем колбэки -открытия, -закрытия попапа, -сабмита добавления новой карточки
 
 addCardPopupOpenButton.addEventListener('click', function (){openPopup(addCardPopup)})
-addCardPopupCloseButton.addEventListener('click', function (){closePopup(addCardPopup)})
 addCardPopupForm.addEventListener('submit', submitCardForm); 
-addCardPopupContainer.addEventListener('click', function(event){event.stopPropagation()});
-
-// Попап "изображения карточки": вешаем функционал закрытия попапа
-
-photoPopupCloseButton.addEventListener('click', function (){closePopup(cardsPhotoPopup)});
-photoPopupContainer.addEventListener('click', function(event){event.stopPropagation()});
-
-// Общий функционал попаов: выключение при нажатии на Esc и клике на оверлей
-
-popupsAll.forEach(popup => popup.addEventListener('click',function (){closePopup(popup)}));
 
 // Включаем валидацию форм и полей 
 
