@@ -2,12 +2,14 @@
 // import {addLikeOnServer, removeLikeOnServer, getCardsData, removeCardFromServer} from "./api.js";
 // import {renderCardPopup} from "./modal.js";
 
+//import openPopup
+
 import { api } from "./api.js";
 
 const userId = "c6b69b7acd7fe01fee50d11b"; // убрать когда создадим класс пользователя
 
 class Card {
-  constructor({ _id, name, link, likes, owner}, selector) {
+  constructor({ _id, name, link, likes, owner }, selector/*, handleCardClick*/) {
     this.name = name;
     this.link = link;
     this.likesValue = likes.length;
@@ -15,6 +17,7 @@ class Card {
     this._id = _id;
     this._idOwner = owner._id;
     this._selector = selector;
+    //this.handleCardClick = handleCardClick;
   }
   _getElement() {
     const cardElement = document
@@ -127,6 +130,10 @@ class Card {
     const container = document.getElementById("elements-container");
     container.prepend(card);
   }
+
+  // handleCardClick(evt) {
+  //   evt.target.addEventListener('click', openPopup);
+  // }
 }
 
 api.getInitialCards().then((data) => {
@@ -135,3 +142,10 @@ api.getInitialCards().then((data) => {
     card.render(card.generate());
   });
 });
+
+// Для каждой карточки создайте экземпляр класса Card.
+
+//  Когда дойдёте до реализации классов Popup,
+//   свяжите класс Card c попапом. Сделайте так,
+//    чтобы Card принимал в конструктор функцию handleCardClick.
+//     При клике на карточку эта функция должна открывать попап с картинкой.

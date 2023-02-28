@@ -43,15 +43,6 @@
   
   export const photoPopupCloseButton = document.querySelector('.photo-popup__close-icon');
   export const photoPopupContainer = document.querySelector('.photo-popup__container');
-  
-  export const validationConfig = {
-    formSelector: '.form',
-    inputSelector: '.form__item',
-    submitButtonSelector: '.form__button',
-    inactiveButtonClass: 'form__button_inactive',
-    inputErrorClass: 'form__item_error',
-    errorClass: 'form__error-text_active'
-  }; 
 
   export const apiConfig = {
     baseUrl: 'https://nomoreparties.co/v1/plus-cohort-19',

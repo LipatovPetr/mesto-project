@@ -35,28 +35,28 @@ import {createCard,
 
 import {renderError} from "./utils";
 
-// функция закрытия попапа при нажадии на Esc
+// // функция закрытия попапа при нажадии на Esc
 
-function closeByEscape(evt) {
-  if (evt.key === 'Escape') {
-    const openedPopup = document.querySelector('.popup_opened');
-    closePopup(openedPopup);
-  }
-}
+// function closeByEscape(evt) {
+//   if (evt.key === 'Escape') {
+//     const openedPopup = document.querySelector('.popup_opened');
+//     closePopup(openedPopup);
+//   }
+// }
 
-// Функция открытия попапа и добавление листенера закрытия при нажатии на Esc
+// // Функция открытия попапа и добавление листенера закрытия при нажатии на Esc
 
-export function openPopup(popup) {
-  popup.classList.add('popup_opened');
-  document.addEventListener('keydown', closeByEscape); 
-}
+// export function openPopup(popup) {
+//   popup.classList.add('popup_opened');
+//   document.addEventListener('keydown', closeByEscape); 
+// }
 
-// Функция закрытия попапа и удаление листенера закрытия при нажатии на Esc
+// // Функция закрытия попапа и удаление листенера закрытия при нажатии на Esc
 
-export function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', closeByEscape); 
-}
+// export function closePopup(popup) {
+//   popup.classList.remove('popup_opened');
+//   document.removeEventListener('keydown', closeByEscape); 
+// }
 
 //  Колбэк-функция отображения данных профиля в попапе профиля
 
