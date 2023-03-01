@@ -5,11 +5,15 @@
 //import openPopup
 
 import { api } from "./api.js";
+import Section from "./section.js";
 
 const userId = "c6b69b7acd7fe01fee50d11b"; // убрать когда создадим класс пользователя
 
 class Card {
-  constructor({ _id, name, link, likes, owner }, selector/*, handleCardClick*/) {
+  constructor(
+    { _id, name, link, likes, owner },
+    selector /*, handleCardClick*/
+  ) {
     this.name = name;
     this.link = link;
     this.likesValue = likes.length;
@@ -75,7 +79,8 @@ class Card {
       .addEventListener("click", this.removeCard);
   }
 
-  removeCard(evt) { // уточнить почему без эвента не получается
+  removeCard(evt) {
+    // уточнить почему без эвента не получается
     evt.target.closest(".elements__element").remove();
     api.removeCardFromServer(
       evt.target.closest(".elements__element").dataset.cardId
@@ -87,9 +92,11 @@ class Card {
     this._element.querySelector(".elements__image").src = this.link;
     this._element.querySelector(".elements__image").alt = this.name;
     this._element.querySelector(".elements__title").textContent = this.name;
-    this._element.querySelector(".elements__likes-value").textContent = this.likesValue;
+    this._element.querySelector(".elements__likes-value").textContent =
+      this.likesValue;
     this._element.querySelector(".elements__element").dataset.cardId = this._id;
-    this._element.querySelector(".elements__element").dataset.ownerId = this._idOwner;
+    this._element.querySelector(".elements__element").dataset.ownerId =
+      this._idOwner;
     this._setRemoveButtonStatus();
     this._setInitialLikeStatus();
     this._setEventListeners();
@@ -126,22 +133,17 @@ class Card {
     });
   }
 
-  render(card) {
-    const container = document.getElementById("elements-container");
-    container.prepend(card);
-  }
-
   // handleCardClick(evt) {
   //   evt.target.addEventListener('click', openPopup);
   // }
 }
 
-api.getInitialCards().then((data) => {
-  data.forEach((el) => {
-    const card = new Card(el, ".card-template");
-    card.render(card.generate());
-  });
-});
+// api.getInitialCards().then((data) => {
+//   data.forEach((el) => {
+//     const card = new Card(el, ".card-template");
+//     card.render(card.generate());
+//   });
+// });
 
 // Для каждой карточки создайте экземпляр класса Card.
 
@@ -149,3 +151,23 @@ api.getInitialCards().then((data) => {
 //   свяжите класс Card c попапом. Сделайте так,
 //    чтобы Card принимал в конструктор функцию handleCardClick.
 //     При клике на карточку эта функция должна открывать попап с картинкой.
+
+// отрисовка первых 30 карточек с помощью класса Section
+// что-то подобное нужно будет перенести в индекс
+
+const cardListSection = ".content__elements";
+
+api.getInitialCards()
+    .then((data) => {
+      const cardList = new Section(
+        {
+          items: data,
+          renderer: (item) => {
+            const cardElement2 = new Card(item, ".card-template");
+            cardList.addItem(cardElement2.generate());
+          },
+        },
+        cardListSection
+      );
+      cardList.renderItems();
+    });
