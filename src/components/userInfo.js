@@ -1,17 +1,32 @@
-// управление информацией о пользователе на странице
+import { api } from "./api.js";
 
-class UserInfo {
-    constructor() {
-//     Принимает в конструктор объект с селекторами двух элементов:
-//      элемента имени пользователя и элемента информации о себе.
-    }
+class UserInfo2 {
+  constructor({ name, about }) {
+    this.nameElement = document.querySelector(name);
+    this.aboutElement = document.querySelector(about);
+  }
 
+  getUserInfo() {
+    api.getProfileData().then((userData) => {
+      return(userData);
+    });
+  }
 
-// Содержит публичный метод getUserInfo, который возвращает объект
-//  с данными пользователя. Данные для этого метода нужно получать
-//   от методов класса Api — подумайте над тем, как внедрить метод
-//    класса Api в getUserInfo. Когда данные пользователя нужно будет
-//     подставить в форму при открытии — метод вам пригодится.
-// Содержит публичный метод setUserInfo, который принимает новые
-//  данные пользователя, отправляет их на сервер и добавляет их на страницу.
+  setUserInfo(name, about) {
+    api.uploadProfileData(name, about).then((userData) => {
+        this.nameElement.textContent = userData.name;
+        this.aboutElement.textContent = userData.about;
+    })
+  }
 }
+
+// Тест: создаем класс и с помощью его метода обновляем и выводим на странице имя и профессию пользователя
+
+const sels = {name: ".profile__name", about:".profile__title"} // 
+const profile = new UserInfo2(sels);
+profile.setUserInfo("Петр Липатов", "Исследователь океанов")
+
+
+
+
+

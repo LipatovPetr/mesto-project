@@ -65,6 +65,10 @@ import {
   enableValidation
 } from "./components/validate.js";
 
+import {
+  UserInfo, 
+} from "./components/userInfo.js";
+
 // **************** КЛИЕНТСКИЙ КОД **************** 
 
 // здесь должны использоваться все классы
