@@ -1,6 +1,6 @@
 const validationConfig = {
   formSelector: '.form',
-  inputSelector: '.form__item',
+  inputSelector: '.form__item', // получается это элеент валидируемой формы?????????
   submitButtonSelector: '.form__button',
   inactiveButtonClass: 'form__button_inactive',
   inputErrorClass: 'form__item_error',
@@ -9,22 +9,24 @@ const validationConfig = {
 
 class FormValidator {
 
-  constructor({ settings }, formElement /*элемент валидируемой формы*/) {
+  constructor({ settings }, formElement) {
     this.formSelector = settings.formSelector;
-    this.inputSelector = settings.inputSelector;
     this.submitButtonSelector = settings.submitButtonSelector;
     this.inactiveButtonClass = settings.inactiveButtonClass;
     this.inputErrorClass = settings.inputErrorClass;
     this.errorClass = settings.errorClass;
 
-    this._formElement = formElement;
+    this.formElement = formElement;
   }
 
   // метод активации ошибки валидации
   _showError( inputElement ) { // инпутЭлемент - это инпутСелектор?
 
-    const errorElement = this._formElement.querySelector(`.${inputElement.id}-error`); // ?
-    this.inputElement.classList.add(this.inputErrorClass);
+    const inputElement = this.formElement;
+
+    const errorElement = `${inputElement.id}-error`; // найдем уникальный id элемента валидируемой формы
+
+    inputElement.classList.add(this.inputErrorClass);
     errorElement.textContent = this.errorClass;
     errorElement.classList.add(this.errorClass);
   };
@@ -54,7 +56,7 @@ class FormValidator {
   };
 
   // метод валидации всех полей формы 
-  _hasInvalidInput(inputList) {
+  _hasInvalidInput(inputList) { // инпутЛист - все ок??
     return inputList.some((inputElement) => {
       return !inputElement.validity.valid;
     })
